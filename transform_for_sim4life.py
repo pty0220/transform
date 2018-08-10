@@ -20,8 +20,8 @@ axes.SetTotalLength(30,30,30)
 D_tran2target =55.22
 
 
-Target = SMA
-Target_name = 'SMA'
+Target = S1_re
+Target_name = 'S1'
 
 #######################################################################################
 ########################################
@@ -34,7 +34,7 @@ readtxt = np.loadtxt(txt_file_name)
 ARC = readtxt[:,0]
 
 starting_point = readtxt[:,4:7]
-skull, skull_actor = pty.read_skull('phantom_filled.stl',0.5)
+skull, skull_actor = pty.read_skull('skull-smooth2.stl',0.5)
 space, space_actor = pty.read_skull('brain_space.stl',1)
 focus, focus_actor = pty.addPoint(ren,Target,[1,0,0],4)
 
@@ -42,10 +42,11 @@ focus, focus_actor = pty.addPoint(ren,Target,[1,0,0],4)
 angle   =  input('type range angle: ')
 number   = input('type whole transducer number: ')
 
-name = Target_name + '_' + number + '_' + angle + '_skull_transform'
+skull_name = Target_name + '_' + number + '_' + angle + '_skull_transform'
+space_name = Target_name + '_' + number + '_' + angle + '_space_transform'
 
 os.chdir(txt_folder_name)
-for i in [0,100]:
+for i in range(1200):
 
     number = readtxt[i, 1]
     print(number)
@@ -96,21 +97,21 @@ for i in [0,100]:
 
 
 
-        a = i
+
         writer = vtk.vtkPolyDataWriter()
         writer.SetInputData(T_skull2)
-        name = name+str(i)
-        writer.SetFileName(name)
+        name_num = skull_name+str(i)
+        writer.SetFileName(name_num)
         writer.Update()
 
-        # writer2 = vtk.vtkPolyDataWriter()
-        # writer2.SetInputData(T_space2)
-        # writer2.SetFileName(Target_name+'_'+number+'_'+angle+'_space_transform' +str(i) + '.vtk')
-        # writer2.Update()
-        #
-        # print(str(i)+ 'number finish')
-        #
-        #
+        writer2 = vtk.vtkPolyDataWriter()
+        s_name_num = space_name+str(i)
+        writer.SetFileName(s_name_num)
+        writer.Update()
+
+        print(str(i)+ 'number finish')
+
+
 
 
 
